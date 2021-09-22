@@ -23,6 +23,7 @@ services:
             - sail
         depends_on:
             - mysql
+            - adminer
             - redis
             - meilisearch
             - selenium
@@ -44,6 +45,12 @@ services:
           test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
           retries: 3
           timeout: 5s
+    adminer:
+        image: 'adminer:latest'
+        ports:
+            - 8080:8080
+        networks:
+            - sail
     redis:
         image: 'redis:alpine'
         ports:
