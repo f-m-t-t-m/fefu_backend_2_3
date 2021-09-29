@@ -23,7 +23,6 @@ services:
             - sail
         depends_on:
             - pgsql
-            - adminer
             - redis
             - meilisearch
             - selenium
@@ -47,7 +46,7 @@ services:
     adminer:
         image: 'adminer:latest'
         ports:
-            - 8080:8080
+            - '${ADMINER_PORT: -9090}:8080'
         networks:
             - sail
     redis:
