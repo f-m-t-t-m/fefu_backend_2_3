@@ -26,8 +26,8 @@ class AppealPostRequest extends FormRequest
     public function rules()
     {
         return [
-            'surname' => ['required','string','max:20'],
-            'name' => ['required','string','max:40'],
+            'surname' => ['required','string','max:40'],
+            'name' => ['required','string','max:20'],
             'patronymic' => ['nullable','string','max:20'],
             'age' => ['required','integer','between:14, 125'],
             'gender' => ['required', Rule::in([Gender::MALE, Gender::FEMALE])],

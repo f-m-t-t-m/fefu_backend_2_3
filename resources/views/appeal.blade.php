@@ -52,7 +52,7 @@
             </div>
             <div>
                 <label>Age</label>
-                <input class="border-t" name="age" type="number" value="{{ old('age') }}"/>
+                <input class="border-t" name="age" type="text" value="{{ old('age') }}"/>
             </div>
             <div>
                 <label>Phone</label>

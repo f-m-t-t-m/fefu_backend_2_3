@@ -9,6 +9,7 @@ class PhoneSanitizer
         if ($value === null) {
             return null;
         }
-        return preg_replace('/((\+7)|7|8){1} \((\d{3})\) (\d{2})-(\d{2})-(\d{3})/', '7$3$4$5$6', $value);
+        $value = preg_replace('/\D+/', '', $value);
+        return '7' . substr($value, 1);
     }
 }
