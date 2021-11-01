@@ -2,73 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AppealPostRequest;
 use App\Models\Appeal;
+use App\Sanitizers\PhoneSanitizer;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Enums\Gender;
 
 class AppealController extends Controller
 {
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \App\Http\Requests\AppealPostRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function create() {
+        return view('appeal');
+    }
+
+    public function save(AppealPostRequest $request)
     {
-        $errors = [];
-        $success = $request->session()->get('success', false);
+        $validated = $request->validated();
 
-        if ($request->isMethod('post')) {
-            $name = $request->input('name');
-            $phone = $request->input('phone');
-            $email = $request->input('email');
-            $message = $request->input('message');
+        $appeal = new Appeal();
+        $appeal->name = $validated['name'];
+        $appeal->surname = $validated['surname'];
+        $appeal->patronymic = $validated['patronymic'];
+        $appeal->age = $validated['age'];
+        $appeal->gender = $validated['gender'];
+        $appeal->phone = PhoneSanitizer::sanitize($validated['phone']);
+        $appeal->email = $validated['email'];
+        $appeal->message = $validated['message'];
+        $appeal->save();
 
-            if ($name === null) {
-                $errors['name'] = 'Name is empty';
-            }
-            if ($phone === null && $email === null) {
-                $errors['contacts'] = 'Phone or E-mail fields must be filled';
-            }
-            if ($message === null) {
-                $errors['message'] = 'Message is empty';
-            }
-
-            if (strlen($name) > 20) {
-                $errors['name'] = 'Name overflow';
-            }
-
-            if (strlen($phone) > 11) {
-                $errors['phone'] = 'Phone overflow';
-            }
-
-            if (strlen($email) > 100) {
-                $errors['email'] = 'E-mail overflow';
-            }
-
-            if (strlen($message) > 100) {
-                $errors['message'] = 'Message overflow';
-            }
-
-            if (count($errors) > 0) {
-                $request->flash();
-            }
-
-            else {
-                $appeal = new Appeal();
-                $appeal->name = $name;
-                $appeal->phone = $phone;
-                $appeal->email = $email;
-                $appeal->message = $message;
-                $appeal->save();
-                $success = true;
-
-                return redirect()
-                    ->route('appeal')
-                    ->with('success', $success);
-            }
-        }
-
-        return view('appeal', ['errors' => $errors, 'success' => $success]);
+        return redirect()
+            ->route('appeal')
+            ->with('success', 'Appeal created');
     }
 }
