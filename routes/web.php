@@ -2,6 +2,7 @@
 
 
 namespace App\Http\Controllers;
+use App\Http\Middleware\RedirectFromOldSlug;
 use App\Http\Requests\AppealPostRequest;
 use Illuminate\Support\Facades\Route;
 use \App\Models\News;
