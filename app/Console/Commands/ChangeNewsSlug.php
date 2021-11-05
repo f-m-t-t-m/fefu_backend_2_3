@@ -67,10 +67,7 @@ class ChangeNewsSlug extends Command
 
 
         DB::transaction(function () use ($news, $oldSlug, $newSlug, $newUrl){
-            $redirect = Redirect::where('old_slug',  parse_url($newUrl, PHP_URL_PATH))->first();
-            if ($redirect !== null) {
-                $redirect->delete();
-            }
+            Redirect::where('old_slug',  parse_url($newUrl, PHP_URL_PATH))->delete();
 
             $news->slug = $newSlug;
             $news->save();
