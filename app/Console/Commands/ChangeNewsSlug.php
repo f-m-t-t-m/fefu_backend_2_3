@@ -43,17 +43,16 @@ class ChangeNewsSlug extends Command
     {
         $oldSlug = $this->argument('oldSlug');
         $newSlug = $this->argument('newSlug');
-        $oldUrl = route('news_item', ['slug' => $oldSlug]);
-        $newUrl = route('news_item', ['slug' => $newSlug]);
-
+        $oldUrl = route('news_item', ['slug' => $oldSlug], false);
+        $newUrl = route('news_item', ['slug' => $newSlug], false);
 
         if ($oldSlug === $newSlug) {
             $this->error("Old slug equals to new slug");
             return 1;
         }
 
-        $redirect = Redirect::where('old_slug',  parse_url($oldUrl, PHP_URL_PATH))
-            ->where('new_slug', parse_url($newUrl, PHP_URL_PATH))->first();
+        $redirect = Redirect::where('old_slug',  $oldUrl)
+            ->where('new_slug', $newUrl)->first();
         if($redirect !== null) {
             $this->error("This redirect already exists");
             return 1;
@@ -65,10 +64,8 @@ class ChangeNewsSlug extends Command
             return 1;
         }
 
-
-        DB::transaction(function () use ($news, $oldSlug, $newSlug, $newUrl){
-            Redirect::where('old_slug',  parse_url($newUrl, PHP_URL_PATH))->delete();
-
+        DB::transaction(function () use ($news, $newSlug, $newUrl){
+            Redirect::where('old_slug',  $newUrl)->delete();
             $news->slug = $newSlug;
             $news->save();
         });
