@@ -21,6 +21,16 @@
         </style>
     </head>
     <body>
+        @if (session()->get('show_suggest') === true)
+            <script type="text/javascript">
+                let isAccepted = confirm("Would you like to leave a feedback?");
+                if (isAccepted) {
+                    let url = new URL("{{ route('appeal') }}");
+                    url.searchParams.set('accepted', '1');
+                    window.location.href = url;
+                }
+            </script>
+        @endif
         <h1>Новости</h1>
         @foreach($news as $n)
             <a href="{{ route('news_item', ['slug' => $n->slug]) }}">{{ $n->title }}</a>
@@ -30,5 +40,6 @@
             @endif
         @endforeach
         {{ $news->links() }}
+        <p>Количество: {{ session('max_count') }} {{ session('cur_count') }}</p>
     </body>
 </html>

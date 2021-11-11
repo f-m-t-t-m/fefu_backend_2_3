@@ -21,6 +21,16 @@
         </style>
     </head>
     <body>
+        @if (session()->get('show_suggest') === true)
+            <script type="text/javascript">
+                let isAccepted = confirm("Would you like to leave a feedback?");
+                if (isAccepted) {
+                    let url = new URL("{{ route('appeal') }}");
+                    url.searchParams.set('accepted', '1');
+                    window.location.href = url;
+                }
+            </script>
+        @endif
         <a href="{{ route('news_list') }}">Новости</a>
         <h1>{{ $news->title }}</h1>
         <p> {{ $news->published_at }}</p>

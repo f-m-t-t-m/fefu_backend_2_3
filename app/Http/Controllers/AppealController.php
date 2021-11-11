@@ -17,7 +17,10 @@ class AppealController extends Controller
      * @param \App\Http\Requests\AppealPostRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create(Request $request) {
+        if ($request->get('accepted')) {
+            return redirect()->route('appeal')->with('accepted', true);
+        }
         return view('appeal');
     }
 
@@ -35,6 +38,7 @@ class AppealController extends Controller
         $appeal->email = $validated['email'];
         $appeal->message = $validated['message'];
         $appeal->save();
+        $request->session()->put('appeal', true);
 
         return redirect()
             ->route('appeal')

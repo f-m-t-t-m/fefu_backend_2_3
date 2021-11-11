@@ -21,6 +21,16 @@
         </style>
     </head>
     <body class="antialiased">
+        @if (session()->get('show_suggest') === true)
+            <script type="text/javascript">
+                let isAccepted = confirm("Would you like to leave a feedback?");
+                if (isAccepted) {
+                    let url = new URL("{{ route('appeal') }}");
+                    url.searchParams.set('accepted', '1');
+                    window.location.href = url;
+                }
+            </script>
+        @endif
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">

@@ -27,6 +27,12 @@
                 {{ session('success') }}
             </div>
         @endif
+
+        @if ( request()->session()->get('accepted') === true)
+            <p>Your feedback is very important to us</p>
+            <a href="{{url()->previous()}}">Back to previous page</a>
+        @endif
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
