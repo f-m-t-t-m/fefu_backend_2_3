@@ -28,7 +28,7 @@
             </div>
         @endif
 
-        @if ( request()->session()->get('accepted') === true)
+        @if ($showMessage === true)
             <p>Your feedback is very important to us</p>
             <a href="{{url()->previous()}}">Back to previous page</a>
         @endif

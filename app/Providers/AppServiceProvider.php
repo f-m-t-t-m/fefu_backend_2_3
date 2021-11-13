@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\settings;
+use App\Models\Settings;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,8 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton(settings::class, function(){
-            return settings::query()->firstOrFail();
+        $this->app->singleton(Settings::class, function(){
+            return Settings::query()->firstOrFail();
         });
     }
 }

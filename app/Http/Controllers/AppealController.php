@@ -18,10 +18,14 @@ class AppealController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request) {
+        $showMessage = false;
         if ($request->get('accepted')) {
-            return redirect()->route('appeal')->with('accepted', true);
+            if ($request->session()->get('show_message') === true) {
+                $showMessage = true;
+            }
+            $request->session()->put('show_message', false);
         }
-        return view('appeal');
+        return view('appeal', ['showMessage' => $showMessage]);
     }
 
     public function save(AppealPostRequest $request)

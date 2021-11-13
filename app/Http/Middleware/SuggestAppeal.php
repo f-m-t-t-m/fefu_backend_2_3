@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\settings;
+use App\Models\Settings;
 use Closure;
 use Illuminate\Http\Request;
 use mysql_xdevapi\Session;
@@ -19,7 +19,7 @@ class SuggestAppeal
 
     public function handle(Request $request, Closure $next)
     {
-        $settings = app(settings::class);
+        $settings = app(Settings::class);
 
         if ($request->session()->get('appeal') === true) {
             return $next($request);
@@ -35,6 +35,7 @@ class SuggestAppeal
                 $request->session()->increment('cur_count');
             } else {
                 $request->session()->now('show_suggest', true);
+                $request->session()->put('show_message', true);
                 $request->session()->increment('max_count');
                 $request->session()->put('cur_count', 0);
             }
