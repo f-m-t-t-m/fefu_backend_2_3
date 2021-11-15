@@ -2,6 +2,7 @@
 
 
 namespace App\Http\Controllers;
+use App\Http\Middleware\SuggestAppeal;
 use App\Http\Requests\AppealPostRequest;
 use Illuminate\Support\Facades\Route;
 use \App\Models\News;
@@ -26,5 +27,7 @@ Route::get('/news', [NewsController::class, 'getList'])->name('news_list');
 
 Route::get('/news/{slug}', [NewsController::class, 'getDetails'])->name('news_item');
 
-Route::get('/appeal', [AppealController::class, 'create'])->name('appeal');
-Route::post('/appeal/save', [AppealController::class, 'save'])->name('save_appeal');
+Route::get('/appeal', [AppealController::class, 'create'])->name('appeal')
+    ->withoutMiddleware([SuggestAppeal::class]);
+Route::post('/appeal/save', [AppealController::class, 'save'])->name('save_appeal')
+    ->withoutMiddleware([SuggestAppeal::class]);
