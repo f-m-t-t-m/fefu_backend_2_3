@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-           NewsSeeder::class,
+            NewsSeeder::class,
+            UserSeeder::class,
+            PostSeeder::class,
+            CommentSeeder::class,
         ]);
     }
 }
