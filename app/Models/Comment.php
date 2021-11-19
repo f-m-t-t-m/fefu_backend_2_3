@@ -18,4 +18,10 @@ class Comment extends Model
     public function post(): BelongsTo {
         return $this->belongsTo(Post::class);
     }
+
+    public function scopeOrdered(Builder $builder): Builder {
+        return $builder
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+    }
 }
