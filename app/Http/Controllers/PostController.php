@@ -31,14 +31,13 @@ class PostController extends Controller
     public function store(Request $request) : JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'sometimes|required|max:100',
-            'text' => 'sometimes|required|max:2000'
+            'title' => 'required|max:100',
+            'text' => 'required|max:2000'
         ]);
 
         if ($validator->fails()) {
             $messages = $validator->errors()->all();
-            $msg = $messages[0];
-            return response()->json(['error' => $msg], 400);
+            return response()->json(['message' => $messages], 422);
         }
 
         $validated = $validator->validated();
@@ -78,8 +77,7 @@ class PostController extends Controller
 
         if ($validator->fails()) {
             $messages = $validator->errors()->all();
-            $msg = $messages[0];
-            return response()->json(['error' => $msg], 400);
+            return response()->json(['error' => $messages], 422);
         }
 
         $validated = $validator->validated();

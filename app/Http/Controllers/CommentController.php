@@ -17,10 +17,9 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($post_slug) : JsonResponse
+    public function index(Post $post) : JsonResponse
     {
-        $post = Post::query()->where('slug', $post_slug)->first();
-        $comments = $post->comments()->orderByDesc('created_at')->paginate(2);
+        $comments = $post->comments()->ordered()->paginate(2);
         return response()->json(CommentResource::collection($comments));
     }
 
@@ -30,18 +29,15 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($post_slug, Request $request) : JsonResponse
+    public function store(Post $post, Request $request) : JsonResponse
     {
-        $post = Post::query()->where('slug', $post_slug)->first();
-
         $validator = Validator::make($request->all(), [
-            'text' => 'sometimes|required|max:150'
+            'text' => 'required|max:150'
         ]);
 
         if ($validator->fails()) {
             $messages = $validator->errors()->all();
-            $msg = $messages[0];
-            return response()->json(['error' => $msg], 400);
+            return response()->json(['error' => $messages], 422);
         }
 
         $validated = $validator->validated();
@@ -60,12 +56,8 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show($post_slug, Comment $comment) : JsonResponse
+    public function show(Post $post, Comment $comment) : JsonResponse
     {
-        $post = Post::query()->where('slug', $post_slug)->first();
-        if ($post->id !== $comment->post_id) {
-            return response()->json(['message' => 'Comment not found'], 404);
-        }
         return response()->json(new CommentResource($comment));
     }
 
@@ -76,21 +68,15 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update($post_slug, Request $request, Comment $comment) : JsonResponse
+    public function update(Post $post, Request $request, Comment $comment) : JsonResponse
     {
-        $post = Post::query()->where('slug', $post_slug)->first();
-        if ($post->id !== $comment->post_id) {
-            return response()->json(['message' => 'Comment not found'], 404);
-        }
-
         $validator = Validator::make($request->all(), [
             'text' => 'sometimes|required|max:150'
         ]);
 
         if ($validator->fails()) {
             $messages = $validator->errors()->all();
-            $msg = $messages[0];
-            return response()->json(['error' => $msg], 400);
+            return response()->json(['error' => $messages], 422);
         }
 
         $validated = $validator->validated();
@@ -106,12 +92,8 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($post_slug, Comment $comment) : JsonResponse
+    public function destroy(Post $post, Comment $comment) : JsonResponse
     {
-        $post = Post::query()->where('slug', $post_slug)->first();
-        if ($post->id !== $comment->post_id) {
-            return response()->json(['message' => 'Comment not found'], 404);
-        }
         $comment->delete();
         return response()->json(['message' => 'Comment removed successfully']);
     }

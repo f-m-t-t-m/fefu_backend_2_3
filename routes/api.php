@@ -29,6 +29,10 @@ Route::apiResource('posts', PostController::class)
     });
 
 Route::apiResource('posts.comments', CommentController::class)
+    ->scoped([
+        'post' => 'slug',
+        'comment' => 'id'
+    ])
     ->missing(function () {
         return response()->json(['message' => 'Comment not found']);
     });
