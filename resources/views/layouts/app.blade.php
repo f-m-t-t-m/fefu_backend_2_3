@@ -31,6 +31,17 @@
             }
         </script>
     @endif
+    @if (\Illuminate\Support\Facades\Auth::check())
+        <p>
+            <a href="{{ route('profile') }}">Profile</a>
+            <a href="{{ route('logout') }}">Logout</a>
+        </p>
+    @else
+        <p>
+            <a href="{{ route('login') }}">Login</a>
+            <a href="{{ route('register') }}">Registration</a>
+        </p>
+    @endif
     @yield('content')
 </body>
 </html>
