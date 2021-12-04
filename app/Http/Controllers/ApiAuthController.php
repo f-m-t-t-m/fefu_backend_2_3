@@ -16,7 +16,7 @@ class ApiAuthController extends Controller
     public function register(Request $request) : JsonResponse {
         $request['login'] = strtolower($request['login']);
         $validator = Validator::make($request->all(), [
-            'login' => 'required|unique:users|between:5, 30|regex: /^[\w\.-]+$/',
+            'login' => 'required|unique:users|between:5, 30|regex: /^[(?i)a-z(?-i)\.-]+$/',
             'password' => 'required|between:10, 30|regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].{10,}$/'
         ]);
 
@@ -54,8 +54,8 @@ class ApiAuthController extends Controller
     public function login(Request $request) : JsonResponse {
         $request['login'] = strtolower($request['login']);
         $validator = Validator::make($request->all(), [
-            'login' => 'required',
-            'password' => 'required'
+            'login' => 'required|max:30',
+            'password' => 'required|max:30'
         ]);
 
         if ($validator->fails()) {
@@ -64,10 +64,12 @@ class ApiAuthController extends Controller
         }
 
         $validated = $validator->validated();
-        $user = User::query()->where('login', $validated['login'])->first();
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
-            return response()->json(['message' => 'wrong login or password']);
+
+        if (!Auth::attempt(['login' => $validated['login'], 'password' => $validated['password']])) {
+            return response()->json(['message' => 'Wrong login or password'], 422);
         }
+
+        $user = User::query()->where('login', $validated['login'])->first();
         $token = $user->createToken('token')->plainTextToken;
         $responce = [
             'token' => $token,

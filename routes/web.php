@@ -36,11 +36,7 @@ Route::match(['get', 'post'], '/register', WebRegisterController::class)->name('
 
 Route::match(['get', 'post'], '/login', WebLoginController::class)->name('login');
 
-Route::get('/logout', WebLogoutController::class)->name('logout')
-    ->middleware('auth');
-
-Route::get('/profile', WebProfileController::class)->name('profile')
-    ->middleware('auth');
-
-
-
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', WebLogoutController::class)->name('logout');
+    Route::get('/profile', WebProfileController::class)->name('profile');
+});

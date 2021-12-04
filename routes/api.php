@@ -38,5 +38,7 @@ Route::apiResource('posts.comments', CommentController::class)
 Route::post('/register', [ApiAuthController::class, 'register']);
 Route::post('/login', [ApiAuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->post('/logout', [ApiAuthController::class, 'logout']);
-Route::middleware('auth:sanctum')->post('/profile', [ApiAuthController::class, 'profile']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [ApiAuthController::class, 'logout']);
+    Route::post('/profile', [ApiAuthController::class, 'profile']);
+});

@@ -22,8 +22,8 @@ class WebLoginController extends Controller
         if ($request->isMethod('post')) {
             $request['login'] = strtolower($request['login']);
             $validated = $request->validate([
-                'login' => ['required'],
-                'password' => ['required'],
+                'login' => 'required|max:30',
+                'password' => 'required|max:30',
             ]);
 
             if (Auth::attempt($validated)) {
