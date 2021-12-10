@@ -15,6 +15,7 @@ class UpdateUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('login', 30)->unique();
+            $table->string('role')->nullable();
             $table->string('name')->nullable()->change();
             $table->string('email')->nullable()->change();
         });
@@ -29,6 +30,7 @@ class UpdateUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('login');
+            $table->dropColumn('role');
             $table->string('name')->nullable(false)->change();
             $table->string('email')->unique()->nullable(false)->change();
         });
