@@ -16,7 +16,7 @@ class ApiAuthController extends Controller
     public function register(Request $request) : JsonResponse {
         $request['login'] = strtolower($request['login']);
         $validator = Validator::make($request->all(), [
-            'login' => 'required|unique:users|between:5, 30|regex: /^[(?i)a-z(?-i)\.-]+$/',
+            'login' => 'required|unique:users|between:5, 30|regex: /^[a-z\.-]+$/i',
             'password' => 'required|between:10, 30|regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].{10,}$/'
         ]);
 
