@@ -31,3 +31,12 @@ Route::get('/appeal', [AppealController::class, 'create'])->name('appeal')
     ->withoutMiddleware([SuggestAppeal::class]);
 Route::post('/appeal/save', [AppealController::class, 'save'])->name('save_appeal')
     ->withoutMiddleware([SuggestAppeal::class]);
+
+Route::match(['get', 'post'], '/register', WebRegisterController::class)->name('register');
+
+Route::match(['get', 'post'], '/login', WebLoginController::class)->name('login');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', WebLogoutController::class)->name('logout');
+    Route::get('/profile', WebProfileController::class)->name('profile');
+});

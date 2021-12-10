@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@inject('auth', '\Illuminate\Support\Facades\Auth')
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,6 +31,17 @@
                 window.location.href = url;
             }
         </script>
+    @endif
+    @if ($auth::check())
+        <p>
+            <a href="{{ route('profile') }}">Profile</a>
+            <a href="{{ route('logout') }}">Logout</a>
+        </p>
+    @else
+        <p>
+            <a href="{{ route('login') }}">Login</a>
+            <a href="{{ route('register') }}">Registration</a>
+        </p>
     @endif
     @yield('content')
 </body>
