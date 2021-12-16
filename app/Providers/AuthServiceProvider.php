@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+
+use App\Enums\Role;
 use App\Models\Post;
 use App\Policies\PostPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -14,7 +16,6 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Post::class => PostPolicy::class,
     ];
 
     /**
@@ -27,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::before(function ($user, $ability) {
-            if ($user->role === 'admin') {
+            if ((int) $user->role === Role::ADMIN) {
                 return true;
             }
         });

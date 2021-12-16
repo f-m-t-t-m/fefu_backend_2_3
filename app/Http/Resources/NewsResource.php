@@ -16,6 +16,7 @@ class NewsResource extends JsonResource
     {
         return [
             'title' => $this->title,
+            'slug' => route('news_item', ['slug' => $this->slug]),
             'description' => $this->description,
             'text' => $this->text,
             'published_at' => $this->published_at,

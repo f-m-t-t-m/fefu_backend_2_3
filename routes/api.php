@@ -23,7 +23,7 @@ Route::apiResource('posts', PostController::class)
         'post' => 'slug'
     ])
     ->missing(function () {
-       return response()->json(['message' => 'Post not found']);
+       return response()->json(['message' => 'Post not found'], 404);
     });
 
 Route::apiResource('posts.comments', CommentController::class)
@@ -32,15 +32,15 @@ Route::apiResource('posts.comments', CommentController::class)
         'comment' => 'id'
     ])
     ->missing(function () {
-        return response()->json(['message' => 'Comment not found']);
+        return response()->json(['message' => 'Comment not found'], 404);
     });
 
 Route::apiResource('news', ApiNewsController::class)
     ->scoped([
-        'news' => 'id'
+        'news' => 'slug'
     ])
     ->missing(function () {
-       return response()->json(['message' => 'News not found']);
+       return response()->json(['message' => 'News not found'], 404);
     });
 
 Route::post('/register', [ApiAuthController::class, 'register']);

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Role;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -30,7 +31,7 @@ class PostPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user, Post $post) {
-        if ($user->role === 'moderator' || $user->id === $post->user_id) {
+        if ((int)$user->role === Role::MODERATOR || $user->id === $post->user_id) {
             return true;
         }
     }
@@ -44,7 +45,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        if ($user->role === 'moderator') {
+        if ((int)$user->role === Role::MODERATOR) {
             return true;
         }
         if ($user->id === $post->user_id) {

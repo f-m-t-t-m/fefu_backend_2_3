@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Role;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -30,7 +31,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        if ($user->role === 'moderator' || $user->id === $comment->user_id) {
+        if ((int)$user->role === Role::MODERATOR || $user->id === $comment->user_id) {
             return true;
         }
     }
@@ -44,7 +45,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        if ($user->role === 'moderator' || $user->id === $comment->user_id) {
+        if ((int)$user->role === ROLE::MODERATOR || $user->id === $comment->user_id) {
             return true;
         }
     }
